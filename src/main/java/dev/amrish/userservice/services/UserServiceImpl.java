@@ -37,10 +37,13 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isEmpty()){
             throw new UserFoundException("User not Found !!!");
         }
-        if(bCryptPasswordEncoder.matches(password,optionalUser.get().getHashedPassword())){
+
+        User user = optionalUser.get();
+
+        if(!bCryptPasswordEncoder.matches(password, user.getHashedPassword())){
             throw new PasswordInCorrectException("Password Incorrect Plz try Again ....");
         }
-        User user = optionalUser.get();
+
         Token token = createToken(user);
 
         return tokenRepository.save(token);
